@@ -2,16 +2,22 @@
 <nav class="navbar">
   <button class="hamburger" aria-label="Obre el menú">☰</button>
   <ul class="nav-links">
-    <li><a href="../index.html">Inici</a></li>
-    <li><a href="../arkanoid/index.html">Arkanoid</a></li>
-    <li><a href="../space-invaders/index.html">Space Invaders</a></li>
-    <li><a href="../pong/index.html">Pong</a></li>
-    <li><a href="../breakout/index.html">Breakout</a></li>
-    <li><a href="../tetris/index.html">Tetris</a></li>
+    <li><a href="/Test/index.html">Inici</a></li>
+    <li><a href="/Test/arkanoid/index.html">Arkanoid</a></li>
+    <li><a href="/Test/space-invaders/index.html">Space Invaders</a></li>
+    <li><a href="/Test/pong/index.html">Pong</a></li>
+    <li><a href="/Test/breakout/index.html">Breakout</a></li>
+    <li><a href="/Test/tetris/index.html">Tetris</a></li>
   </ul>
 </nav>
 <script>
-  document.querySelector('.hamburger').onclick = function() {
-    document.querySelector('.nav-links').classList.toggle('open');
-  };
+  document.addEventListener('DOMContentLoaded', function() {
+    var hamburger = document.querySelector('.hamburger');
+    var navLinks = document.querySelector('.nav-links');
+    if (hamburger && navLinks) {
+      hamburger.onclick = function() {
+        navLinks.classList.toggle('open');
+      };
+    }
+  });
 </script>

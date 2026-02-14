@@ -1,3 +1,20 @@
+nav {
+  width: 100vw;
+  background: #111;
+  padding: 10px 0;
+  text-align: center;
+  margin-bottom: 10px;
+}
+nav a {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 18px;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+nav a:hover {
+  text-decoration: underline;
+}
 body {
   margin: 0;
   padding: 0;

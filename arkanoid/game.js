@@ -45,14 +45,47 @@ function initBricks() {
 
 initBricks();
 
-// Controls tàctils
-const leftBtn = document.getElementById('left-btn');
-const rightBtn = document.getElementById('right-btn');
+// Controls drag minimalista
+let dragging = false;
+let lastX = null;
 
-leftBtn.addEventListener('touchstart', e => { leftPressed = true; e.preventDefault(); });
-leftBtn.addEventListener('touchend', e => { leftPressed = false; e.preventDefault(); });
-rightBtn.addEventListener('touchstart', e => { rightPressed = true; e.preventDefault(); });
-rightBtn.addEventListener('touchend', e => { rightPressed = false; e.preventDefault(); });
+canvas.addEventListener('touchstart', e => {
+  if (e.touches.length === 1) {
+    dragging = true;
+    lastX = e.touches[0].clientX;
+  }
+});
+canvas.addEventListener('touchmove', e => {
+  if (dragging && e.touches.length === 1) {
+    const dx = e.touches[0].clientX - lastX;
+    paddleX += dx;
+    lastX = e.touches[0].clientX;
+    if (paddleX < 0) paddleX = 0;
+    if (paddleX > CANVAS_WIDTH - paddleWidth) paddleX = CANVAS_WIDTH - paddleWidth;
+  }
+});
+canvas.addEventListener('touchend', e => {
+  dragging = false;
+});
+canvas.addEventListener('mousedown', e => {
+  dragging = true;
+  lastX = e.clientX;
+});
+canvas.addEventListener('mousemove', e => {
+  if (dragging) {
+    const dx = e.clientX - lastX;
+    paddleX += dx;
+    lastX = e.clientX;
+    if (paddleX < 0) paddleX = 0;
+    if (paddleX > CANVAS_WIDTH - paddleWidth) paddleX = CANVAS_WIDTH - paddleWidth;
+  }
+});
+canvas.addEventListener('mouseup', e => {
+  dragging = false;
+});
+canvas.addEventListener('mouseleave', e => {
+  dragging = false;
+});
 
 // Controls per teclat (opcional)
 document.addEventListener('keydown', e => {

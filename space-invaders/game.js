@@ -48,16 +48,48 @@ function initEnemies() {
 }
 initEnemies();
 
-// Controls tàctils
-const leftBtn = document.getElementById('left-btn');
-const rightBtn = document.getElementById('right-btn');
-const shootBtn = document.getElementById('shoot-btn');
-leftBtn.addEventListener('touchstart', e => { leftPressed = true; e.preventDefault(); });
-leftBtn.addEventListener('touchend', e => { leftPressed = false; e.preventDefault(); });
-rightBtn.addEventListener('touchstart', e => { rightPressed = true; e.preventDefault(); });
-rightBtn.addEventListener('touchend', e => { rightPressed = false; e.preventDefault(); });
-shootBtn.addEventListener('touchstart', e => { shootPressed = true; e.preventDefault(); });
-shootBtn.addEventListener('touchend', e => { shootPressed = false; e.preventDefault(); });
+
+// Controls drag minimalista
+let dragging = false;
+let lastX = null;
+
+canvas.addEventListener('touchstart', e => {
+	if (e.touches.length === 1) {
+		dragging = true;
+		lastX = e.touches[0].clientX;
+	}
+});
+canvas.addEventListener('touchmove', e => {
+	if (dragging && e.touches.length === 1) {
+		const dx = e.touches[0].clientX - lastX;
+		shipX += dx;
+		lastX = e.touches[0].clientX;
+		if (shipX < 0) shipX = 0;
+		if (shipX > CANVAS_WIDTH - shipWidth) shipX = CANVAS_WIDTH - shipWidth;
+	}
+});
+canvas.addEventListener('touchend', e => {
+	dragging = false;
+});
+canvas.addEventListener('mousedown', e => {
+	dragging = true;
+	lastX = e.clientX;
+});
+canvas.addEventListener('mousemove', e => {
+	if (dragging) {
+		const dx = e.clientX - lastX;
+		shipX += dx;
+		lastX = e.clientX;
+		if (shipX < 0) shipX = 0;
+		if (shipX > CANVAS_WIDTH - shipWidth) shipX = CANVAS_WIDTH - shipWidth;
+	}
+});
+canvas.addEventListener('mouseup', e => {
+	dragging = false;
+});
+canvas.addEventListener('mouseleave', e => {
+	dragging = false;
+});
 
 // Controls teclat (opcional)
 document.addEventListener('keydown', e => {

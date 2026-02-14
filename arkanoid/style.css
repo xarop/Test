@@ -1,0 +1,42 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: #111;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+#gameCanvas {
+  background: #222;
+  display: block;
+  margin: 0 auto;
+  border: 2px solid #fff;
+  border-radius: 10px;
+  touch-action: none;
+}
+#touch-controls {
+  position: fixed;
+  bottom: 20px;
+  left: 0;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  z-index: 10;
+}
+#touch-controls button {
+  font-size: 2.5rem;
+  padding: 20px 40px;
+  border-radius: 20px;
+  border: none;
+  background: #444;
+  color: #fff;
+  opacity: 0.8;
+  transition: background 0.2s;
+}
+#touch-controls button:active {
+  background: #fff;
+  color: #222;
+}

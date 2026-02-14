@@ -7,6 +7,22 @@
   <link rel="stylesheet" href="index.css">
 </head>
 <body>
+  <nav class="navbar">
+    <button class="hamburger" aria-label="Obre el menú">☰</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Inici</a></li>
+      <li><a href="arkanoid/index.html">Arkanoid</a></li>
+      <li><a href="space-invaders/index.html">Space Invaders</a></li>
+      <li><a href="pong/index.html">Pong</a></li>
+      <li><a href="breakout/index.html">Breakout</a></li>
+      <li><a href="tetris/index.html">Tetris</a></li>
+    </ul>
+  </nav>
+  <script>
+    document.querySelector('.hamburger').onclick = function() {
+      document.querySelector('.nav-links').classList.toggle('open');
+    };
+  </script>
   <main>
     <h1>Projectes de Xarop</h1>
     <ul class="project-list">

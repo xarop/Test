@@ -1,9 +1,12 @@
+/* Menú hamburger minimalista */
+.navbar {
 nav {
   width: 100vw;
   background: #111;
   padding: 8px 0;
   text-align: center;
   margin-bottom: 8px;
+.hamburger {
 }
 nav a {
   color: #fff;
@@ -11,6 +14,7 @@ nav a {
   margin: 0 12px;
   font-size: 1rem;
 }
+.nav-links {
 nav a:hover {
   text-decoration: underline;
 }
@@ -22,17 +26,21 @@ body {
   flex-direction: column;
   align-items: center;
   height: 100vh;
+.nav-links.open {
   overflow: hidden;
 }
+.nav-links li {
 #gameCanvas {
   background: #111;
   display: block;
+.nav-links a {
   margin: 0 auto;
   border: 1px solid #fff;
   touch-action: none;
 }
   display: flex;
   justify-content: center;
+.nav-links a:hover {
   gap: 40px;
   z-index: 10;
 }

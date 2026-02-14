@@ -54,3 +54,11 @@ function clearLines(){for(let y=ROWS-1;y>=0;y--){if(board[y].every(v=>v)){board.
 let last=0,interval=500;
 function loop(ts){if(ts-last>interval){drop();clearLines();last=ts;}draw();requestAnimationFrame(loop);}
 loop();
+
+function resizeCanvas() {
+  const size = Math.min(window.innerWidth / 10, 24);
+  canvas.width = 10 * size;
+  canvas.height = 20 * size;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();

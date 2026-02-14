@@ -25,14 +25,20 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
+  overflow-x: hidden;
 .nav-links.open {
   overflow: hidden;
 }
 .nav-links li {
 #gameCanvas {
-  background: #111;
   display: block;
+  width: 100vw;
+  max-width: 480px;
+  height: 70vh;
+  max-height: 700px;
+  background: #111;
+  margin: 0 auto;
 .nav-links a {
   margin: 0 auto;
   border: 1px solid #fff;

@@ -200,7 +200,11 @@ function gameLoop() {
 gameLoop();
 
 // Redimensiona el canvas si canvia la mida de la finestra
-window.addEventListener('resize', () => {
-  canvas.width = Math.min(window.innerWidth, 480);
-  canvas.height = Math.min(window.innerHeight * 0.7, 700);
-});
+function resizeCanvas() {
+  const w = Math.min(window.innerWidth, 480);
+  const h = Math.min(window.innerHeight * 0.7, 700);
+  canvas.width = w;
+  canvas.height = h;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();

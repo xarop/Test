@@ -77,3 +77,10 @@ function loop() {
   requestAnimationFrame(loop);
 }
 loop();
+
+function resizeCanvas() {
+  canvas.width = Math.min(window.innerWidth, 480);
+  canvas.height = Math.min(window.innerHeight * 0.7, 640);
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();

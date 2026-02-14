@@ -1,0 +1,66 @@
+/* Menú hamburger minimalista i responsive comú */
+.navbar {
+  width: 100vw;
+  background: #111;
+  padding: 8px 0;
+  text-align: left;
+  position: relative;
+  z-index: 1000;
+}
+.hamburger {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  cursor: pointer;
+  margin-left: 1em;
+}
+.nav-links {
+  display: none;
+  flex-direction: column;
+  background: #111;
+  position: absolute;
+  left: 0;
+  top: 100%;
+  width: 100vw;
+  padding: 0;
+  margin: 0;
+  z-index: 1001;
+}
+.nav-links.open {
+  display: flex;
+}
+.nav-links li {
+  list-style: none;
+  border-bottom: 1px solid #222;
+}
+.nav-links a {
+  color: #fff;
+  text-decoration: none;
+  display: block;
+  padding: 1em 2em;
+  font-size: 1.1rem;
+}
+.nav-links a:hover {
+  background: #222;
+}
+@media (min-width: 600px) {
+  .hamburger {
+    display: none;
+  }
+  .nav-links {
+    display: flex !important;
+    flex-direction: row;
+    position: static;
+    width: auto;
+    background: none;
+    border: none;
+  }
+  .nav-links li {
+    border: none;
+  }
+  .nav-links a {
+    padding: 0.5em 1.5em;
+    font-size: 1.1rem;
+  }
+}

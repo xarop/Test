@@ -7,56 +7,53 @@
   <link rel="stylesheet" href="index.css">
 </head>
 <body>
-  <nav class="navbar">
-    <button class="hamburger" aria-label="Obre el menú">☰</button>
-    <ul class="nav-links">
-      <li><a href="index.html">Inici</a></li>
-      <li><a href="arkanoid/index.html">Arkanoid</a></li>
-      <li><a href="space-invaders/index.html">Space Invaders</a></li>
-      <li><a href="pong/index.html">Pong</a></li>
-      <li><a href="breakout/index.html">Breakout</a></li>
-      <li><a href="tetris/index.html">Tetris</a></li>
-    </ul>
-  </nav>
+  <link rel="stylesheet" href="common/menu.css">
+  <div id="menu-container"></div>
   <script>
-    document.querySelector('.hamburger').onclick = function() {
-      document.querySelector('.nav-links').classList.toggle('open');
-    };
+    fetch('common/menu.html').then(r=>r.text()).then(html=>{
+      document.getElementById('menu-container').innerHTML = html;
+    });
   </script>
   <main>
-    <h1>Projectes de Xarop</h1>
-    <ul class="project-list">
-      <li>
-        <a href="arkanoid/index.html">
-          <strong>Arkanoid</strong><br>
-          <span>Arrossega la pala per trencar maons</span>
-        </a>
-      </li>
-      <li>
-        <a href="space-invaders/index.html">
-          <strong>Space Invaders</strong><br>
-          <span>Arrossega la nau per disparar als invasors</span>
-        </a>
-      </li>
-      <li>
-        <a href="pong/index.html">
-          <strong>Pong</strong><br>
-          <span>Arrossega la pala per retornar la pilota</span>
-        </a>
-      </li>
-      <li>
-        <a href="breakout/index.html">
-          <strong>Breakout</strong><br>
-          <span>Versió minimalista, trenca tots els maons</span>
-        </a>
-      </li>
-      <li>
-        <a href="tetris/index.html">
-          <strong>Tetris</strong><br>
-          <span>Arrossega per moure peces, encaixa-les!</span>
-        </a>
-      </li>
-    </ul>
+    <h1>Xarop IA Games</h1>
+    <p class="intro">Col·lecció de jocs clàssics minimalistes, creats per testejar les possibilitats de la IA i la web. Projecte de <a href="https://xarop.com" target="_blank">xarop.com</a>. Tots els jocs són 100% jugables des de mòbil i ordinador, amb controls suaus i sense complicacions.</p>
+    <div class="games-grid">
+      <a class="game-card" href="arkanoid/index.html">
+        <img src="arkanoid/capture.png" alt="Arkanoid" loading="lazy" />
+        <div>
+          <strong>Arkanoid</strong>
+          <span>Trenca maons arrossegant la pala</span>
+        </div>
+      </a>
+      <a class="game-card" href="space-invaders/index.html">
+        <img src="space-invaders/capture.png" alt="Space Invaders" loading="lazy" />
+        <div>
+          <strong>Space Invaders</strong>
+          <span>Destrueix invasors arrossegant la nau</span>
+        </div>
+      </a>
+      <a class="game-card" href="pong/index.html">
+        <img src="pong/capture.png" alt="Pong" loading="lazy" />
+        <div>
+          <strong>Pong</strong>
+          <span>Clàssic minimalista, juga amb la pala</span>
+        </div>
+      </a>
+      <a class="game-card" href="breakout/index.html">
+        <img src="breakout/capture.png" alt="Breakout" loading="lazy" />
+        <div>
+          <strong>Breakout</strong>
+          <span>Trenca tots els maons!</span>
+        </div>
+      </a>
+      <a class="game-card" href="tetris/index.html">
+        <img src="tetris/capture.png" alt="Tetris" loading="lazy" />
+        <div>
+          <strong>Tetris</strong>
+          <span>Encaixa peces arrossegant</span>
+        </div>
+      </a>
+    </div>
   </main>
 </body>
 </html>

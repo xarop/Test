@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Xarop Lab - Proyectos de Prueba</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0b0f1a;
+        --bg-card: #161b2c;
+        --text: #f1f5f9;
+        --text-dim: #94a3b8;
+        --primary: #818cf8;
+        --secondary: #c084fc;
+        --border: rgba(255, 255, 255, 0.06);
+        --transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: "Outfit", sans-serif;
+        line-height: 1.6;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
+      }
+
+      .background-blobs {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+        filter: blur(80px);
+        opacity: 0.4;
+      }
+
+      .blob {
+        position: absolute;
+        width: 40vw;
+        height: 40vw;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        animation: move 20s infinite alternate;
+      }
+
+      .blob-1 {
+        top: -10%;
+        left: -10%;
+      }
+      .blob-2 {
+        bottom: -10%;
+        right: -10%;
+        background: linear-gradient(135deg, var(--secondary), var(--primary));
+        animation-delay: -5s;
+      }
+
+      @keyframes move {
+        from {
+          transform: translate(0, 0) scale(1);
+        }
+        to {
+          transform: translate(10%, 10%) scale(1.1);
+        }
+      }
+
+      header {
+        padding: 6rem 2rem 4rem;
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        font-size: 3.5rem;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        margin-bottom: 1rem;
+        background: linear-gradient(to right, #fff, var(--text-dim));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      p.subtitle {
+        font-size: 1.1rem;
+        color: var(--text-dim);
+        font-weight: 300;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem 8rem;
+        flex: 1;
+      }
+
+      .project-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 2rem;
+      }
+
+      .project-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 2rem;
+        text-decoration: none;
+        color: var(--text);
+        transition: var(--transition);
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      .project-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        opacity: 0;
+        transition: var(--transition);
+        z-index: 0;
+      }
+
+      .project-card:hover {
+        transform: translateY(-8px);
+        border-color: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+      }
+
+      .project-card:hover::before {
+        opacity: 0.05;
+      }
+
+      .project-card * {
+        position: relative;
+        z-index: 1;
+      }
+
+      .project-icon {
+        width: 48px;
+        height: 48px;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+        color: var(--primary);
+        font-size: 1.5rem;
+        transition: var(--transition);
+      }
+
+      .project-card:hover .project-icon {
+        background: var(--primary);
+        color: white;
+        transform: scale(1.1);
+      }
+
+      .project-name {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      .project-desc {
+        font-size: 0.95rem;
+        color: var(--text-dim);
+        font-weight: 300;
+        flex: 1;
+      }
+
+      .project-status {
+        margin-top: 1.5rem;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--primary);
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .status-dot {
+        width: 6px;
+        height: 6px;
+        background: var(--primary);
+        border-radius: 50%;
+        display: inline-block;
+        box-shadow: 0 0 10px var(--primary);
+      }
+
+      footer {
+        padding: 4rem 2rem;
+        text-align: center;
+        color: var(--text-dim);
+        font-size: 0.85rem;
+        font-weight: 300;
+        letter-spacing: 0.05em;
+        border-top: 1px solid var(--border);
+      }
+
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 2.5rem;
+        }
+        header {
+          padding: 4rem 1.5rem 3rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="background-blobs">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+    </div>
+
+    <header>
+      <h1>Xarop Lab</h1>
+      <p class="subtitle">
+        Índice de experimentos, prototipos y desarrollos web modernos. Explora
+        la intersección del diseño y la tecnología.
+      </p>
+    </header>
+
+    <div class="container">
+      <div class="project-grid">
+        <a href="headless_blog/" class="project-card">
+          <div class="project-icon">󰒔</div>
+          <div class="project-name">Headless Blog</div>
+          <div class="project-desc">
+            Exploración de WordPress como CMS headless usando Lit y Cells para
+            el frontend.
+          </div>
+          <div class="project-status">
+            <span class="status-dot"></span> Active
+          </div>
+        </a>
+
+        <a href="games/" class="project-card">
+          <div class="project-icon">󰊗</div>
+          <div class="project-name">Retrogames Arcade</div>
+          <div class="project-desc">
+            Colección de juegos clásicos (Arkanoid, Pong, Tetris, etc.)
+            reconstruidos con Canvas.
+          </div>
+          <div class="project-status">
+            <span class="status-dot"></span> Collection
+          </div>
+        </a>
+
+        <a href="social_practice/" class="project-card">
+          <div class="project-icon">󰍡</div>
+          <div class="project-name">Social Practice</div>
+          <div class="project-desc">
+            Componentes y layouts para redes sociales y comunicación visual
+            moderna.
+          </div>
+          <div class="project-status">
+            <span class="status-dot"></span> Research
+          </div>
+        </a>
+
+        <a href="web_test/" class="project-card">
+          <div class="project-icon">󰙨</div>
+          <div class="project-name">Web Test</div>
+          <div class="project-desc">
+            Pruebas de componentes Lit, animaciones y nuevas tecnologías
+            frontend.
+          </div>
+          <div class="project-status">
+            <span class="status-dot"></span> Sandbox
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <footer>
+      &copy; 2026 Xarop Design & Development. Barcelona Experience.
+    </footer>
+  </body>
+</html>

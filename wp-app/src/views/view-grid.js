@@ -16,109 +16,109 @@ import '../components/post-card.js';
 const PER_PAGE = 9;
 
 export class ViewGrid extends LitElement {
-  static styles = [sharedStyles, stateStyles, gridStyles];
+    static styles = [sharedStyles, stateStyles, gridStyles];
 
-  static properties = {
-    _posts:        { state: true },
-    _loading:      { state: true },
-    _error:        { state: true },
-    _currentPage:  { state: true },
-    _totalPages:   { state: true },
-    _totalPosts:   { state: true },
-  };
+    static properties = {
+        _posts: { state: true },
+        _loading: { state: true },
+        _error: { state: true },
+        _currentPage: { state: true },
+        _totalPages: { state: true },
+        _totalPosts: { state: true },
+    };
 
-  constructor() {
-    super();
-    this._posts       = [];
-    this._loading     = true;
-    this._error       = null;
-    this._currentPage = 1;
-    this._totalPages  = 1;
-    this._totalPosts  = 0;
-  }
-
-  // ─── Lifecycle ────────────────────────────────────────────────────────────
-
-  connectedCallback() {
-    super.connectedCallback();
-    this.#loadPosts();
-  }
-
-  // ─── Data ─────────────────────────────────────────────────────────────────
-
-  async #loadPosts() {
-    this._loading = true;
-    this._error = null;
-
-    try {
-      // La REST API devuelve total de posts y páginas en las cabeceras
-      const url = `https://xarop.com/wp-json/wp/v2/posts?_embed&page=${this._currentPage}&per_page=${PER_PAGE}&orderby=date&order=desc`;
-      const response = await fetch(url);
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status} — ${response.statusText}`);
-      }
-
-      this._totalPosts  = parseInt(response.headers.get('X-WP-Total') ?? '0', 10);
-      this._totalPages  = parseInt(response.headers.get('X-WP-TotalPages') ?? '1', 10);
-      this._posts       = await response.json();
-    } catch (err) {
-      this._error = err.message;
-    } finally {
-      this._loading = false;
-      // Scroll suave al inicio al cambiar de página
-      this.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    constructor() {
+        super();
+        this._posts = [];
+        this._loading = true;
+        this._error = null;
+        this._currentPage = 1;
+        this._totalPages = 1;
+        this._totalPosts = 0;
     }
-  }
 
-  // ─── Paginación ───────────────────────────────────────────────────────────
+    // ─── Lifecycle ────────────────────────────────────────────────────────────
 
-  #goToPage(page) {
-    if (page < 1 || page > this._totalPages) return;
-    this._currentPage = page;
-    this.#loadPosts();
-  }
+    connectedCallback() {
+        super.connectedCallback();
+        this.#loadPosts();
+    }
 
-  // ─── Eventos ──────────────────────────────────────────────────────────────
+    // ─── Data ─────────────────────────────────────────────────────────────────
 
-  #onPostSelected(e) {
-    this.dispatchEvent(
-      new CustomEvent('navigate', {
-        detail: { route: `/post/${e.detail.id}` },
-        bubbles: true,
-        composed: true,
-      })
-    );
-  }
+    async #loadPosts() {
+        this._loading = true;
+        this._error = null;
 
-  // ─── Templates ────────────────────────────────────────────────────────────
+        try {
+            // La REST API devuelve total de posts y páginas en las cabeceras
+            const url = `https://xarop.com/wp-json/wp/v2/posts?_embed&page=${this._currentPage}&per_page=${PER_PAGE}&orderby=date&order=desc`;
+            const response = await fetch(url);
 
-  #renderPageHeader() {
-    return html`
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status} — ${response.statusText}`);
+            }
+
+            this._totalPosts = parseInt(response.headers.get('X-WP-Total') ?? '0', 10);
+            this._totalPages = parseInt(response.headers.get('X-WP-TotalPages') ?? '1', 10);
+            this._posts = await response.json();
+        } catch (err) {
+            this._error = err.message;
+        } finally {
+            this._loading = false;
+            // Scroll suave al inicio al cambiar de página
+            this.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    // ─── Paginación ───────────────────────────────────────────────────────────
+
+    #goToPage(page) {
+        if (page < 1 || page > this._totalPages) return;
+        this._currentPage = page;
+        this.#loadPosts();
+    }
+
+    // ─── Eventos ──────────────────────────────────────────────────────────────
+
+    #onPostSelected(e) {
+        this.dispatchEvent(
+            new CustomEvent('navigate', {
+                detail: { route: `/post/${e.detail.id}` },
+                bubbles: true,
+                composed: true,
+            })
+        );
+    }
+
+    // ─── Templates ────────────────────────────────────────────────────────────
+
+    #renderPageHeader() {
+        return html`
       <header class="page-header">
         <div class="page-header__inner">
           <h1 class="page-header__title">Blog</h1>
           <p class="page-header__meta">
             ${this._totalPosts > 0
-              ? `${this._totalPosts} publicaciones · Página ${this._currentPage} de ${this._totalPages}`
-              : 'Cargando publicaciones…'}
+                ? `${this._totalPosts} publicaciones · Página ${this._currentPage} de ${this._totalPages}`
+                : 'Cargando publicaciones…'}
           </p>
         </div>
       </header>
     `;
-  }
+    }
 
-  #renderLoading() {
-    return html`
+    #renderLoading() {
+        return html`
       <div class="state-wrapper">
         <div class="spinner" role="status" aria-label="Cargando posts"></div>
         <p class="loading-text">Cargando posts…</p>
       </div>
     `;
-  }
+    }
 
-  #renderError() {
-    return html`
+    #renderError() {
+        return html`
       <div class="state-wrapper">
         <div class="error-box" role="alert">
           <h3>Error al cargar el contenido</h3>
@@ -129,10 +129,10 @@ export class ViewGrid extends LitElement {
         </div>
       </div>
     `;
-  }
+    }
 
-  #renderGrid() {
-    return html`
+    #renderGrid() {
+        return html`
       <div class="grid-section">
         <div class="posts-grid" role="list">
           ${this._posts.map(
@@ -144,17 +144,17 @@ export class ViewGrid extends LitElement {
                 ></post-card>
               </div>
             `
-          )}
+        )}
         </div>
         ${this.#renderPagination()}
       </div>
     `;
-  }
+    }
 
-  #renderPagination() {
-    if (this._totalPages <= 1) return nothing;
+    #renderPagination() {
+        if (this._totalPages <= 1) return nothing;
 
-    return html`
+        return html`
       <nav class="pagination" aria-label="Paginación de posts">
         <button
           class="pagination__btn"
@@ -179,19 +179,19 @@ export class ViewGrid extends LitElement {
         </button>
       </nav>
     `;
-  }
+    }
 
-  render() {
-    return html`
+    render() {
+        return html`
       ${this.#renderPageHeader()}
 
       ${this._loading
-        ? this.#renderLoading()
-        : this._error
-          ? this.#renderError()
-          : this.#renderGrid()}
+                ? this.#renderLoading()
+                : this._error
+                    ? this.#renderError()
+                    : this.#renderGrid()}
     `;
-  }
+    }
 }
 
 customElements.define('view-grid', ViewGrid);

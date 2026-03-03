@@ -19,121 +19,121 @@ import { stateStyles } from '../styles/shared.styles.js';
 import { postStyles } from '../styles/post.styles.js';
 
 export class ViewPost extends LitElement {
-  static styles = [sharedStyles, stateStyles, postStyles];
+    static styles = [sharedStyles, stateStyles, postStyles];
 
-  static properties = {
-    /** ID del post pasado desde el router */
-    postId:   { type: Number },
-    _post:    { state: true },
-    _loading: { state: true },
-    _error:   { state: true },
-  };
+    static properties = {
+        /** ID del post pasado desde el router */
+        postId: { type: Number },
+        _post: { state: true },
+        _loading: { state: true },
+        _error: { state: true },
+    };
 
-  constructor() {
-    super();
-    this.postId   = null;
-    this._post    = null;
-    this._loading = true;
-    this._error   = null;
-  }
-
-  // ─── Lifecycle ────────────────────────────────────────────────────────────
-
-  connectedCallback() {
-    super.connectedCallback();
-    if (this.postId) this.#loadPost();
-  }
-
-  /**
-   * Recarga si cambia el postId desde fuera (router).
-   */
-  updated(changedProps) {
-    if (changedProps.has('postId') && this.postId) {
-      this.#loadPost();
+    constructor() {
+        super();
+        this.postId = null;
+        this._post = null;
+        this._loading = true;
+        this._error = null;
     }
-  }
 
-  // ─── Data ─────────────────────────────────────────────────────────────────
+    // ─── Lifecycle ────────────────────────────────────────────────────────────
 
-  async #loadPost() {
-    this._loading = true;
-    this._error   = null;
-    this._post    = null;
-
-    try {
-      this._post = await wpService.getPostById(this.postId);
-    } catch (err) {
-      this._error = err.message;
-    } finally {
-      this._loading = false;
+    connectedCallback() {
+        super.connectedCallback();
+        if (this.postId) this.#loadPost();
     }
-  }
 
-  // ─── Helpers ──────────────────────────────────────────────────────────────
+    /**
+     * Recarga si cambia el postId desde fuera (router).
+     */
+    updated(changedProps) {
+        if (changedProps.has('postId') && this.postId) {
+            this.#loadPost();
+        }
+    }
 
-  get #featuredImage() {
-    return wpService.constructor.getFeaturedImageUrl(this._post, 'full');
-  }
+    // ─── Data ─────────────────────────────────────────────────────────────────
 
-  get #author() {
-    return wpService.constructor.getAuthorName(this._post);
-  }
+    async #loadPost() {
+        this._loading = true;
+        this._error = null;
+        this._post = null;
 
-  /** @returns {Array<{id:number, name:string, slug:string}>} */
-  get #categories() {
-    return wpService.constructor.getCategoriesRaw(this._post);
-  }
+        try {
+            this._post = await wpService.getPostById(this.postId);
+        } catch (err) {
+            this._error = err.message;
+        } finally {
+            this._loading = false;
+        }
+    }
 
-  get #date() {
-    return new Intl.DateTimeFormat('es-ES', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    }).format(new Date(this._post.date));
-  }
+    // ─── Helpers ──────────────────────────────────────────────────────────────
 
-  /** Tiempo estimado de lectura (palabras / 200 palabras por minuto) */
-  get #readingTime() {
-    const words = this._post.content?.rendered?.replace(/<[^>]*>/g, '').split(/\s+/).length ?? 0;
-    return Math.max(1, Math.ceil(words / 200));
-  }
+    get #featuredImage() {
+        return wpService.constructor.getFeaturedImageUrl(this._post, 'full');
+    }
 
-  // ─── Eventos ──────────────────────────────────────────────────────────────
+    get #author() {
+        return wpService.constructor.getAuthorName(this._post);
+    }
 
-  #goBack() {
-    this.dispatchEvent(
-      new CustomEvent('navigate', {
-        detail: { route: '/grid' },
-        bubbles: true,
-        composed: true,
-      })
-    );
-  }
+    /** @returns {Array<{id:number, name:string, slug:string}>} */
+    get #categories() {
+        return wpService.constructor.getCategoriesRaw(this._post);
+    }
 
-  #navigateTo(route) {
-    this.dispatchEvent(
-      new CustomEvent('navigate', {
-        detail: { route },
-        bubbles: true,
-        composed: true,
-      })
-    );
-  }
+    get #date() {
+        return new Intl.DateTimeFormat('es-ES', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+        }).format(new Date(this._post.date));
+    }
 
-  // ─── Templates ────────────────────────────────────────────────────────────
+    /** Tiempo estimado de lectura (palabras / 200 palabras por minuto) */
+    get #readingTime() {
+        const words = this._post.content?.rendered?.replace(/<[^>]*>/g, '').split(/\s+/).length ?? 0;
+        return Math.max(1, Math.ceil(words / 200));
+    }
 
-  #renderLoading() {
-    return html`
+    // ─── Eventos ──────────────────────────────────────────────────────────────
+
+    #goBack() {
+        this.dispatchEvent(
+            new CustomEvent('navigate', {
+                detail: { route: '/grid' },
+                bubbles: true,
+                composed: true,
+            })
+        );
+    }
+
+    #navigateTo(route) {
+        this.dispatchEvent(
+            new CustomEvent('navigate', {
+                detail: { route },
+                bubbles: true,
+                composed: true,
+            })
+        );
+    }
+
+    // ─── Templates ────────────────────────────────────────────────────────────
+
+    #renderLoading() {
+        return html`
       <div class="state-wrapper">
         <div class="spinner" role="status" aria-label="Cargando entrada"></div>
         <p class="loading-text">Cargando entrada…</p>
       </div>
     `;
-  }
+    }
 
-  #renderError() {
-    return html`
+    #renderError() {
+        return html`
       <div class="state-wrapper">
         <div class="error-box" role="alert">
           <h3>No se pudo cargar la entrada</h3>
@@ -144,11 +144,11 @@ export class ViewPost extends LitElement {
         </div>
       </div>
     `;
-  }
+    }
 
-  #renderHeroImage() {
-    if (!this.#featuredImage) return nothing;
-    return html`
+    #renderHeroImage() {
+        if (!this.#featuredImage) return nothing;
+        return html`
       <div class="post-hero" role="img" aria-label="Imagen destacada del post">
         <img
           src="${this.#featuredImage}"
@@ -158,12 +158,12 @@ export class ViewPost extends LitElement {
         />
       </div>
     `;
-  }
+    }
 
-  #renderPost() {
-    const post = this._post;
+    #renderPost() {
+        const post = this._post;
 
-    return html`
+        return html`
       <!-- Botón de volver -->
       <nav class="post-nav" aria-label="Navegación">
         <button class="back-btn" @click="${this.#goBack}" aria-label="Volver al listado">
@@ -178,10 +178,10 @@ export class ViewPost extends LitElement {
       <!-- Cabecera del post -->
       <header class="post-header">
         ${this.#categories.length
-          ? html`
+                ? html`
               <div class="post-categories" aria-label="Categorías">
                 ${this.#categories.map(
-                  (cat) => html`
+                    (cat) => html`
                     <button
                       class="post-category-tag"
                       @click="${() => this.#navigateTo(`/category/${cat.slug}`)}"
@@ -192,7 +192,7 @@ export class ViewPost extends LitElement {
                 )}
               </div>
             `
-          : nothing}
+                : nothing}
 
         <h1 class="post-title">
           ${unsafeHTML(post.title?.rendered ?? 'Sin título')}
@@ -210,15 +210,15 @@ export class ViewPost extends LitElement {
         ${unsafeHTML(post.content?.rendered ?? '')}
       </main>
     `;
-  }
+    }
 
-  render() {
-    if (this._loading) return this.#renderLoading();
-    if (this._error)   return this.#renderError();
-    if (!this._post)   return nothing;
+    render() {
+        if (this._loading) return this.#renderLoading();
+        if (this._error) return this.#renderError();
+        if (!this._post) return nothing;
 
-    return this.#renderPost();
-  }
+        return this.#renderPost();
+    }
 }
 
 customElements.define('view-post', ViewPost);

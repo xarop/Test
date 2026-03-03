@@ -21,93 +21,93 @@ const POSTS_PREVIEW = 6;
 const ALL_ID = null;
 
 export class ViewHome extends LitElement {
-  static styles = [sharedStyles, stateStyles, homeStyles];
+    static styles = [sharedStyles, stateStyles, homeStyles];
 
-  static properties = {
-    _posts:           { state: true },
-    _categories:      { state: true },
-    _activeCatId:     { state: true },
-    _loadingPosts:    { state: true },
-    _loadingCats:     { state: true },
-    _errorPosts:      { state: true },
-    _errorCats:       { state: true },
-  };
+    static properties = {
+        _posts: { state: true },
+        _categories: { state: true },
+        _activeCatId: { state: true },
+        _loadingPosts: { state: true },
+        _loadingCats: { state: true },
+        _errorPosts: { state: true },
+        _errorCats: { state: true },
+    };
 
-  constructor() {
-    super();
-    this._posts        = [];
-    this._categories   = [];
-    /** @type {number|null} null = todas */
-    this._activeCatId  = ALL_ID;
-    this._loadingPosts = true;
-    this._loadingCats  = true;
-    this._errorPosts   = null;
-    this._errorCats    = null;
-  }
-
-  // ─── Lifecycle ────────────────────────────────────────────────────────────
-
-  connectedCallback() {
-    super.connectedCallback();
-    // Carga categorías y posts en paralelo
-    this.#loadCategories();
-    this.#loadPosts();
-  }
-
-  // ─── Data ─────────────────────────────────────────────────────────────────
-
-  async #loadCategories() {
-    this._loadingCats = true;
-    this._errorCats   = null;
-    try {
-      this._categories = await wpService.getAllCategories();
-    } catch (err) {
-      this._errorCats = err.message;
-    } finally {
-      this._loadingCats = false;
+    constructor() {
+        super();
+        this._posts = [];
+        this._categories = [];
+        /** @type {number|null} null = todas */
+        this._activeCatId = ALL_ID;
+        this._loadingPosts = true;
+        this._loadingCats = true;
+        this._errorPosts = null;
+        this._errorCats = null;
     }
-  }
 
-  async #loadPosts(categoryId = this._activeCatId) {
-    this._loadingPosts = true;
-    this._errorPosts   = null;
-    try {
-      this._posts = categoryId === ALL_ID
-        ? await wpService.getPosts({ page: 1, perPage: POSTS_PREVIEW })
-        : await wpService.getPostsByCategoryId(categoryId, { page: 1, perPage: POSTS_PREVIEW });
-    } catch (err) {
-      this._errorPosts = err.message;
-    } finally {
-      this._loadingPosts = false;
+    // ─── Lifecycle ────────────────────────────────────────────────────────────
+
+    connectedCallback() {
+        super.connectedCallback();
+        // Carga categorías y posts en paralelo
+        this.#loadCategories();
+        this.#loadPosts();
     }
-  }
 
-  // ─── Handlers ─────────────────────────────────────────────────────────────
+    // ─── Data ─────────────────────────────────────────────────────────────────
 
-  #selectCategory(catId) {
-    if (catId === this._activeCatId) return; // sin cambio
-    this._activeCatId = catId;
-    this.#loadPosts(catId);
-  }
+    async #loadCategories() {
+        this._loadingCats = true;
+        this._errorCats = null;
+        try {
+            this._categories = await wpService.getAllCategories();
+        } catch (err) {
+            this._errorCats = err.message;
+        } finally {
+            this._loadingCats = false;
+        }
+    }
 
-  #navigate(route) {
-    this.dispatchEvent(
-      new CustomEvent('navigate', {
-        detail: { route },
-        bubbles: true,
-        composed: true,
-      })
-    );
-  }
+    async #loadPosts(categoryId = this._activeCatId) {
+        this._loadingPosts = true;
+        this._errorPosts = null;
+        try {
+            this._posts = categoryId === ALL_ID
+                ? await wpService.getPosts({ page: 1, perPage: POSTS_PREVIEW })
+                : await wpService.getPostsByCategoryId(categoryId, { page: 1, perPage: POSTS_PREVIEW });
+        } catch (err) {
+            this._errorPosts = err.message;
+        } finally {
+            this._loadingPosts = false;
+        }
+    }
 
-  #onPostSelected(e) {
-    this.#navigate(`/post/${e.detail.id}`);
-  }
+    // ─── Handlers ─────────────────────────────────────────────────────────────
 
-  // ─── Templates ────────────────────────────────────────────────────────────
+    #selectCategory(catId) {
+        if (catId === this._activeCatId) return; // sin cambio
+        this._activeCatId = catId;
+        this.#loadPosts(catId);
+    }
 
-  #renderHero() {
-    return html`
+    #navigate(route) {
+        this.dispatchEvent(
+            new CustomEvent('navigate', {
+                detail: { route },
+                bubbles: true,
+                composed: true,
+            })
+        );
+    }
+
+    #onPostSelected(e) {
+        this.#navigate(`/post/${e.detail.id}`);
+    }
+
+    // ─── Templates ────────────────────────────────────────────────────────────
+
+    #renderHero() {
+        return html`
       <section class="hero" aria-label="Bienvenida">
         <p class="hero__eyebrow">Blog & Tecnología</p>
         <h1 class="hero__title">
@@ -127,11 +127,11 @@ export class ViewHome extends LitElement {
         </div>
       </section>
     `;
-  }
+    }
 
-  /** Barra de chips de categorías */
-  #renderFilterBar() {
-    return html`
+    /** Barra de chips de categorías */
+    #renderFilterBar() {
+        return html`
       <div class="filter-bar" role="group" aria-label="Filtrar por categoría">
         <span class="filter-bar__label">Categoría:</span>
         <div class="filter-bar__chips">
@@ -146,10 +146,10 @@ export class ViewHome extends LitElement {
           </button>
 
           ${this._loadingCats
-            /* Skeletons mientras cargan */
-            ? [1, 2, 3, 4].map(() => html`<span class="chip chip--skeleton"></span>`)
-            : this._categories.map(
-                (cat) => html`
+                /* Skeletons mientras cargan */
+                ? [1, 2, 3, 4].map(() => html`<span class="chip chip--skeleton"></span>`)
+                : this._categories.map(
+                    (cat) => html`
                   <button
                     class="chip ${this._activeCatId === cat.id ? 'chip--active' : ''}"
                     @click="${() => this.#selectCategory(cat.id)}"
@@ -160,24 +160,24 @@ export class ViewHome extends LitElement {
                     <span class="chip__count">(${cat.count})</span>
                   </button>
                 `
-              )}
+                )}
         </div>
       </div>
     `;
-  }
+    }
 
-  #renderPostsGrid() {
-    if (this._loadingPosts) {
-      return html`
+    #renderPostsGrid() {
+        if (this._loadingPosts) {
+            return html`
         <div class="state-wrapper">
           <div class="spinner" role="status" aria-label="Cargando posts"></div>
           <p class="loading-text">Cargando posts…</p>
         </div>
       `;
-    }
+        }
 
-    if (this._errorPosts) {
-      return html`
+        if (this._errorPosts) {
+            return html`
         <div class="state-wrapper">
           <div class="error-box" role="alert">
             <h3>No se pudo cargar el contenido</h3>
@@ -188,11 +188,11 @@ export class ViewHome extends LitElement {
           </div>
         </div>
       `;
-    }
+        }
 
-    if (!this._posts.length) {
-      const activeCat = this._categories.find((c) => c.id === this._activeCatId);
-      return html`
+        if (!this._posts.length) {
+            const activeCat = this._categories.find((c) => c.id === this._activeCatId);
+            return html`
         <div class="posts-row">
           <div class="empty-state">
             <span class="empty-state__icon">${Icon.folder({ size: 36 })}</span>
@@ -203,12 +203,12 @@ export class ViewHome extends LitElement {
           </div>
         </div>
       `;
-    }
+        }
 
-    return html`
+        return html`
       <div class="posts-row">
         ${this._posts.map(
-          (post) => html`
+            (post) => html`
             <post-card
               .post="${post}"
               @post-selected="${this.#onPostSelected}"
@@ -217,20 +217,20 @@ export class ViewHome extends LitElement {
         )}
       </div>
     `;
-  }
+    }
 
-  /** Enlace «Ver todos» apunta al archive de categoría (slug) o al grid general */
-  get #gridLink() {
-    if (!this._activeCatId) return '/grid';
-    const cat = this._categories.find((c) => c.id === this._activeCatId);
-    return cat ? `/category/${cat.slug}` : '/grid';
-  }
+    /** Enlace «Ver todos» apunta al archive de categoría (slug) o al grid general */
+    get #gridLink() {
+        if (!this._activeCatId) return '/grid';
+        const cat = this._categories.find((c) => c.id === this._activeCatId);
+        return cat ? `/category/${cat.slug}` : '/grid';
+    }
 
-  #renderSection() {
-    const activeCat = this._categories.find((c) => c.id === this._activeCatId);
-    const title = activeCat ? activeCat.name : 'Últimas entradas';
+    #renderSection() {
+        const activeCat = this._categories.find((c) => c.id === this._activeCatId);
+        const title = activeCat ? activeCat.name : 'Últimas entradas';
 
-    return html`
+        return html`
       <section class="section" aria-label="${title}">
         <header class="section__header">
           <h2 class="section__title">${title}</h2>
@@ -246,14 +246,14 @@ export class ViewHome extends LitElement {
         ${this.#renderPostsGrid()}
       </section>
     `;
-  }
+    }
 
-  render() {
-    return html`
+    render() {
+        return html`
       ${this.#renderHero()}
       ${this.#renderSection()}
     `;
-  }
+    }
 }
 
 customElements.define('view-home', ViewHome);

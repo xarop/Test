@@ -27,38 +27,38 @@ import { sharedStyles } from './styles/shared.styles.js';
  * @property {string}   tag      — Nombre del custom element a renderizar
  */
 const ROUTES = [
-  {
-    pattern: /^\/$/,
-    loader:  () => import('./views/view-home.js'),
-    tag:     'view-home',
-  },
-  {
-    pattern: /^\/grid$/,
-    loader:  () => import('./views/view-grid.js'),
-    tag:     'view-grid',
-  },
-  {
-    pattern: /^\/post\/(\d+)$/,
-    loader:  () => import('./views/view-post.js'),
-    tag:     'view-post',
-    /** Extrae el postId del match de la regex */
-    getProps: (match) => ({ postId: Number(match[1]) }),
-  },
-  {
-    pattern: /^\/category\/([\w-]+)$/,
-    loader:  () => import('./views/view-category.js'),
-    tag:     'view-category',
-    /** Extrae el slug de la categoría */
-    getProps: (match) => ({ categorySlug: match[1] }),
-  },
+    {
+        pattern: /^\/$/,
+        loader: () => import('./views/view-home.js'),
+        tag: 'view-home',
+    },
+    {
+        pattern: /^\/grid$/,
+        loader: () => import('./views/view-grid.js'),
+        tag: 'view-grid',
+    },
+    {
+        pattern: /^\/post\/(\d+)$/,
+        loader: () => import('./views/view-post.js'),
+        tag: 'view-post',
+        /** Extrae el postId del match de la regex */
+        getProps: (match) => ({ postId: Number(match[1]) }),
+    },
+    {
+        pattern: /^\/category\/([\w-]+)$/,
+        loader: () => import('./views/view-category.js'),
+        tag: 'view-category',
+        /** Extrae el slug de la categoría */
+        getProps: (match) => ({ categorySlug: match[1] }),
+    },
 ];
 
 // ─── Componente ───────────────────────────────────────────────────────────────
 
 export class AppMain extends LitElement {
-  static styles = [
-    sharedStyles,
-    css`
+    static styles = [
+        sharedStyles,
+        css`
       :host {
         display: block;
         min-height: 100vh;
@@ -176,110 +176,110 @@ export class AppMain extends LitElement {
         color: var(--color-text);
       }
     `,
-  ];
+    ];
 
-  static properties = {
-    /** Ruta activa (sin el '#') */
-    _route:    { state: true },
-    /** Props dinámicas para pasar a la vista activa (ej: postId) */
-    _props:    { state: true },
-    /** Tag de la vista activa */
-    _viewTag:  { state: true },
-    /** Estado de la transición de carga de la vista */
-    _loadingRoute: { state: true },
-  };
+    static properties = {
+        /** Ruta activa (sin el '#') */
+        _route: { state: true },
+        /** Props dinámicas para pasar a la vista activa (ej: postId) */
+        _props: { state: true },
+        /** Tag de la vista activa */
+        _viewTag: { state: true },
+        /** Estado de la transición de carga de la vista */
+        _loadingRoute: { state: true },
+    };
 
-  constructor() {
-    super();
-    this._route        = '/';
-    this._props        = {};
-    this._viewTag      = null;
-    this._loadingRoute = false;
-  }
-
-  // ─── Lifecycle ────────────────────────────────────────────────────────────
-
-  connectedCallback() {
-    super.connectedCallback();
-    // Escuchar cambios en el hash del navegador
-    window.addEventListener('hashchange', this.#onHashChange);
-    // Escuchar el evento 'navigate' que emiten las vistas hijas
-    this.addEventListener('navigate', this.#onNavigate);
-    // Procesar la ruta inicial
-    this.#resolveRoute(this.#getHash());
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    window.removeEventListener('hashchange', this.#onHashChange);
-    this.removeEventListener('navigate', this.#onNavigate);
-  }
-
-  // ─── Router ───────────────────────────────────────────────────────────────
-
-  /** Obtiene la ruta del hash actual, normalizando a '/' si está vacío */
-  #getHash() {
-    const hash = window.location.hash.slice(1);
-    return hash || '/';
-  }
-
-  /**
-   * Busca la ruta matching y carga dinámicamente el módulo de la vista.
-   * @param {string} path
-   */
-  async #resolveRoute(path) {
-    for (const route of ROUTES) {
-      const match = path.match(route.pattern);
-      if (match) {
-        this._loadingRoute = true;
-        try {
-          // Lazy-load del módulo (solo la primera vez; el navegador cachea el módulo)
-          await route.loader();
-        } finally {
-          this._loadingRoute = false;
-        }
-        this._route   = path;
-        this._viewTag = route.tag;
-        this._props   = route.getProps ? route.getProps(match) : {};
-        return;
-      }
+    constructor() {
+        super();
+        this._route = '/';
+        this._props = {};
+        this._viewTag = null;
+        this._loadingRoute = false;
     }
 
-    // Ninguna ruta coincidió → 404
-    this._route   = path;
-    this._viewTag = null;
-    this._props   = {};
-  }
+    // ─── Lifecycle ────────────────────────────────────────────────────────────
 
-  // ─── Handlers ─────────────────────────────────────────────────────────────
+    connectedCallback() {
+        super.connectedCallback();
+        // Escuchar cambios en el hash del navegador
+        window.addEventListener('hashchange', this.#onHashChange);
+        // Escuchar el evento 'navigate' que emiten las vistas hijas
+        this.addEventListener('navigate', this.#onNavigate);
+        // Procesar la ruta inicial
+        this.#resolveRoute(this.#getHash());
+    }
 
-  #onHashChange = () => {
-    this.#resolveRoute(this.#getHash());
-  };
+    disconnectedCallback() {
+        super.disconnectedCallback();
+        window.removeEventListener('hashchange', this.#onHashChange);
+        this.removeEventListener('navigate', this.#onNavigate);
+    }
 
-  #onNavigate = (e) => {
-    const { route } = e.detail;
-    window.location.hash = route;
-  };
+    // ─── Router ───────────────────────────────────────────────────────────────
 
-  /** Navega a una ruta programáticamente */
-  #navigateTo(route) {
-    window.location.hash = route;
-  }
+    /** Obtiene la ruta del hash actual, normalizando a '/' si está vacío */
+    #getHash() {
+        const hash = window.location.hash.slice(1);
+        return hash || '/';
+    }
 
-  // ─── Helpers de estado ────────────────────────────────────────────────────
+    /**
+     * Busca la ruta matching y carga dinámicamente el módulo de la vista.
+     * @param {string} path
+     */
+    async #resolveRoute(path) {
+        for (const route of ROUTES) {
+            const match = path.match(route.pattern);
+            if (match) {
+                this._loadingRoute = true;
+                try {
+                    // Lazy-load del módulo (solo la primera vez; el navegador cachea el módulo)
+                    await route.loader();
+                } finally {
+                    this._loadingRoute = false;
+                }
+                this._route = path;
+                this._viewTag = route.tag;
+                this._props = route.getProps ? route.getProps(match) : {};
+                return;
+            }
+        }
 
-  /** Devuelve true si la ruta del link es la activa */
-  #isActive(linkRoute) {
-    return this._route.startsWith(linkRoute) && linkRoute !== '/'
-      ? true
-      : this._route === linkRoute;
-  }
+        // Ninguna ruta coincidió → 404
+        this._route = path;
+        this._viewTag = null;
+        this._props = {};
+    }
 
-  // ─── Templates ────────────────────────────────────────────────────────────
+    // ─── Handlers ─────────────────────────────────────────────────────────────
 
-  #renderNav() {
-    return html`
+    #onHashChange = () => {
+        this.#resolveRoute(this.#getHash());
+    };
+
+    #onNavigate = (e) => {
+        const { route } = e.detail;
+        window.location.hash = route;
+    };
+
+    /** Navega a una ruta programáticamente */
+    #navigateTo(route) {
+        window.location.hash = route;
+    }
+
+    // ─── Helpers de estado ────────────────────────────────────────────────────
+
+    /** Devuelve true si la ruta del link es la activa */
+    #isActive(linkRoute) {
+        return this._route.startsWith(linkRoute) && linkRoute !== '/'
+            ? true
+            : this._route === linkRoute;
+    }
+
+    // ─── Templates ────────────────────────────────────────────────────────────
+
+    #renderNav() {
+        return html`
       <nav class="app-nav" aria-label="Navegación principal">
         <div class="app-nav__inner">
           <button
@@ -313,20 +313,20 @@ export class AppMain extends LitElement {
         </div>
       </nav>
     `;
-  }
+    }
 
-  /** Renderiza la vista activa con sus props dinámicas */
-  #renderView() {
-    if (this._loadingRoute) {
-      return html`
+    /** Renderiza la vista activa con sus props dinámicas */
+    #renderView() {
+        if (this._loadingRoute) {
+            return html`
         <div class="not-found">
           <div class="spinner" role="status"></div>
         </div>
       `;
-    }
+        }
 
-    if (!this._viewTag) {
-      return html`
+        if (!this._viewTag) {
+            return html`
         <div class="not-found" role="main">
           <h2>404</h2>
           <p>La página <code>${this._route}</code> no existe.</p>
@@ -338,22 +338,22 @@ export class AppMain extends LitElement {
           </button>
         </div>
       `;
-    }
+        }
 
-    // Creamos el elemento dinámicamente y le asignamos props en el siguiente
-    // ciclo para que Lit pueda hacer el diff correctamente.
-    const el = document.createElement(this._viewTag);
-    Object.assign(el, this._props);
+        // Creamos el elemento dinámicamente y le asignamos props en el siguiente
+        // ciclo para que Lit pueda hacer el diff correctamente.
+        const el = document.createElement(this._viewTag);
+        Object.assign(el, this._props);
 
-    return html`
+        return html`
       <main class="page-slot" id="main-content" tabindex="-1">
         ${el}
       </main>
     `;
-  }
+    }
 
-  #renderFooter() {
-    return html`
+    #renderFooter() {
+        return html`
       <footer class="app-footer">
         <p>
           © ${new Date().getFullYear()} Xarop — Construido con
@@ -368,15 +368,15 @@ export class AppMain extends LitElement {
         </p>
       </footer>
     `;
-  }
+    }
 
-  render() {
-    return html`
+    render() {
+        return html`
       ${this.#renderNav()}
       ${this.#renderView()}
       ${this.#renderFooter()}
     `;
-  }
+    }
 }
 
 customElements.define('app-main', AppMain);

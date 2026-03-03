@@ -1,17 +1,17 @@
 {
-  "name": "wp-app",
-  "version": "1.0.0",
-  "description": "Modular Web App with Lit 3.0 consuming xarop.com WordPress REST API",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "lit": "^3.2.0"
-  },
-  "devDependencies": {
-    "vite": "^5.4.0"
-  }
+    "name": "wp-app",
+    "version": "1.0.0",
+    "description": "Modular Web App with Lit 3.0 consuming xarop.com WordPress REST API",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "lit": "^3.2.0"
+    },
+    "devDependencies": {
+        "vite": "^5.4.0"
+    }
 }
